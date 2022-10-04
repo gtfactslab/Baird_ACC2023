@@ -12,9 +12,12 @@ from stlpy.systems import LinearSystem
 from stlpy.STL import LinearPredicate
 from stlpy.solvers import GurobiMICPSolver
 from matplotlib import pyplot as plt # Python plotting
+from matplotlib import rc
 from polytopes import Polytope, MatrixMath
 
-dT = 0.5 # for first run
+rc('text', usetex=True)
+
+dT = 1 # for first run
 # dT = 0.25 # uncomment for other plots
 
 x0 = np.array([[1.1], [0.]]) # uncomment for constant input first run in the paper
@@ -73,7 +76,7 @@ h_u = np.array([[u_max], [u_max]])
 Hx = Polytope(H_x, h_x)
 Hu = Polytope(H_u, h_u)
 Qp = MatrixMath.controllable_set(A, B, dT, Hx, Hu)
-Qp.plot_polytope(m_title=f'Controllable set, $\Delta t={dT}$', m_xlabel='$x_1$', m_ylabel='$x_2$', save=True)
+Qp.plot_polytope(m_title=f'Maximal control invariant set, $\Delta t={dT}$', m_xlabel='$x_1$', m_ylabel='$x_2$', save=False)
 
 basic_line = np.ones((sim_length)) # for plotting "y in bounds"
 
@@ -142,7 +145,7 @@ x_axis.grid(True)
 x_axis.set_title('Output $y[t]$')
 x_axis.set_xlabel('$t$ (s)')
 x_axis.set_ylabel('$y[t]$')
-x_axis.legend([i_x_1, i_x_2], ['A safe trajectory', 'y in bounds'], loc="lower right")
+x_axis.legend([i_x_1, i_x_2], ['A safe trajectory', '$y$ in bounds'], loc="lower right")
 
 i_u_1, = u_axis.plot(t_np, u_hist[0, 0:sim_length], 'b.-', alpha=0.7)
 i_u_2, = u_axis.plot(t_np, u_nominal[0, 0:sim_length], 'k-', alpha=0.8)
